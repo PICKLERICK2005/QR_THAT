@@ -1,8 +1,12 @@
 import { qrcode } from "../vendor/qrcode-generator/qrcode.mjs";
 import { gradeQr } from "../lib/qr-grade.js";
-import { loadRules } from "../lib/rules.js";
+import { getRulesStatus, loadRules } from "../lib/rules.js";
 import { sanitizeUrl } from "../lib/sanitizer.js";
 import { classifyUrlKind } from "../lib/url-kind.js";
+import {
+  renderAdvancedDetails,
+  setupAdvancedDisclosure,
+} from "./advanced-details.js";
 import { renderUrlKindIndicator } from "./url-kind-indicator.js";
 
 const urlDisplay = document.querySelector("#page-url");
@@ -10,6 +14,18 @@ const qrDisplay = document.querySelector("#qr-code");
 const urlKindIndicator = document.querySelector("#url-kind");
 const sanitizeControl = document.querySelector("#sanitize");
 const settingsButton = document.querySelector("#open-settings");
+const advancedButton = document.querySelector("#advanced-toggle");
+const advancedRegion = document.querySelector("#advanced-details");
+const advancedElements = {
+  original: document.querySelector("#advanced-original"),
+  payload: document.querySelector("#advanced-payload"),
+  qr: document.querySelector("#advanced-qr"),
+  density: document.querySelector("#advanced-density"),
+  sanitization: document.querySelector("#advanced-sanitization"),
+  rules: document.querySelector("#advanced-rules"),
+};
+
+setupAdvancedDisclosure(advancedButton, advancedRegion);
 
 settingsButton.addEventListener("click", async () => {
   try {
@@ -41,17 +57,29 @@ if (!targetUrl) {
 
 if (targetUrl) {
   const originalUrl = targetUrl;
-  const rules = await loadRules();
+  const [rules, rulesStatus] = await Promise.all([loadRules(), getRulesStatus()]);
 
   const render = () => {
-    const displayedUrl = sanitizeControl.checked
-      ? sanitizeUrl(originalUrl, rules).resultUrl
-      : originalUrl;
+    const sanitization = sanitizeControl.checked
+      ? sanitizeUrl(originalUrl, rules)
+      : { resultUrl: originalUrl, changed: false };
+    const displayedUrl = sanitization.resultUrl;
 
     urlDisplay.textContent = displayedUrl;
     qrDisplay.replaceChildren();
     const urlKind = classifyUrlKind(displayedUrl);
     renderUrlKindIndicator(urlKindIndicator, urlKind, null);
+    const metadata = {
+      originalUrl,
+      payload: displayedUrl,
+      grade: null,
+      rulesStatus,
+      sanitization: {
+        enabled: sanitizeControl.checked,
+        changed: sanitization.changed,
+      },
+    };
+    renderAdvancedDetails(advancedElements, metadata);
 
     try {
       const qr = qrcode(0, "M");
@@ -64,6 +92,7 @@ if (targetUrl) {
         alt: "QR code for the selected URL",
       });
       renderUrlKindIndicator(urlKindIndicator, urlKind, grade);
+      renderAdvancedDetails(advancedElements, { ...metadata, grade });
     } catch {
       qrDisplay.textContent = "Unable to generate QR code";
     }
@@ -74,4 +103,7 @@ if (targetUrl) {
 } else {
   urlDisplay.textContent = "Unable to read this page";
   sanitizeControl.disabled = true;
+  advancedButton.disabled = true;
+  advancedButton.title = "Advanced details unavailable";
+  advancedButton.setAttribute("aria-label", "Advanced details unavailable");
 }

@@ -19,7 +19,44 @@
     <p class="url-row">
       <span id="url-kind" class="url-kind-icon" role="img" hidden></span>
       <span id="page-url" class="url">example.com/article</span>
+      <button
+        id="advanced-toggle"
+        class="advanced-button"
+        type="button"
+        aria-expanded="false"
+        aria-controls="advanced-details"
+        aria-label="Show advanced details"
+        title="Show advanced details"
+      ><span class="advanced-button-icon" aria-hidden="true"></span></button>
     </p>
+    <section id="advanced-details" class="advanced-details" aria-label="Advanced details" hidden>
+      <dl>
+        <div>
+          <dt>Original</dt>
+          <dd id="advanced-original"></dd>
+        </div>
+        <div>
+          <dt>QR payload</dt>
+          <dd id="advanced-payload"></dd>
+        </div>
+        <div>
+          <dt>QR</dt>
+          <dd id="advanced-qr"></dd>
+        </div>
+        <div>
+          <dt>Density</dt>
+          <dd id="advanced-density"></dd>
+        </div>
+        <div>
+          <dt>Sanitization</dt>
+          <dd id="advanced-sanitization"></dd>
+        </div>
+        <div>
+          <dt>Rules</dt>
+          <dd id="advanced-rules"></dd>
+        </div>
+      </dl>
+    </section>
     <div class="popup-controls">
       <label
         class="sanitize-control"

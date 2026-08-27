@@ -34,5 +34,17 @@ await access(
     import.meta.url,
   ),
 );
+await access(
+  new URL(
+    "../icons/Material_Symbols/arrow_drop_down_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg",
+    import.meta.url,
+  ),
+);
+await access(
+  new URL(
+    "../icons/Material_Symbols/arrow_drop_up_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg",
+    import.meta.url,
+  ),
+);
 
-console.log("Passed 15 interface asset checks.");
+console.log("Passed 17 interface asset checks.");

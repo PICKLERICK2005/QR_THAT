@@ -1,7 +1,10 @@
 import { qrcode } from "../vendor/qrcode-generator/qrcode.mjs";
+import { loadRules } from "../lib/rules.js";
+import { sanitizeUrl } from "../lib/sanitizer.js";
 
 const urlDisplay = document.querySelector("#page-url");
 const qrDisplay = document.querySelector("#qr-code");
+const sanitizeControl = document.querySelector("#sanitize");
 
 let targetUrl = null;
 
@@ -24,20 +27,34 @@ if (!targetUrl) {
 }
 
 if (targetUrl) {
-  urlDisplay.textContent = targetUrl;
+  const originalUrl = targetUrl;
+  const rules = loadRules();
 
-  try {
-    const qr = qrcode(0, "M");
-    qr.addData(targetUrl);
-    qr.make();
-    qrDisplay.innerHTML = qr.createSvgTag({
-      cellSize: 4,
-      scalable: true,
-      alt: "QR code for the selected URL",
-    });
-  } catch {
-    qrDisplay.textContent = "Unable to generate QR code";
-  }
+  const render = () => {
+    const displayedUrl = sanitizeControl.checked
+      ? sanitizeUrl(originalUrl, rules).resultUrl
+      : originalUrl;
+
+    urlDisplay.textContent = displayedUrl;
+    qrDisplay.replaceChildren();
+
+    try {
+      const qr = qrcode(0, "M");
+      qr.addData(displayedUrl);
+      qr.make();
+      qrDisplay.innerHTML = qr.createSvgTag({
+        cellSize: 4,
+        scalable: true,
+        alt: "QR code for the selected URL",
+      });
+    } catch {
+      qrDisplay.textContent = "Unable to generate QR code";
+    }
+  };
+
+  sanitizeControl.addEventListener("change", render);
+  render();
 } else {
   urlDisplay.textContent = "Unable to read this page";
+  sanitizeControl.disabled = true;
 }

@@ -35,3 +35,14 @@ h1 {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.sanitize-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.875rem;
+}
+
+.sanitize-control input {
+  margin: 0;
+}

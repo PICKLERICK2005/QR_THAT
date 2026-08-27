@@ -33,6 +33,8 @@ node tests/rules-lifecycle.test.mjs
 
 ## License
 
-QR THAT! is licensed under the [MIT License](LICENSE). Bundled third-party materials retain their respective licenses in `vendor/` and `rules/bundled/`.
+QR THAT! is licensed under the [MIT License](LICENSE). Bundled third-party materials retain their respective licenses in `vendor/`, `rules/bundled/`, and `icons/Material_Symbols/`.
+
+Interface icons in `icons/Material_Symbols/` are Google Material Symbols, used under the [Apache License 2.0](icons/Material_Symbols/LICENSE). Project logo assets in `icons/Logo/` are covered by QR THAT!'s MIT License.
 
 >“QR Code” is a registered trademark of DENSO WAVE INCORPORATED. QR THAT! is an independent project and is not affiliated with or endorsed by DENSO WAVE INCORPORATED.

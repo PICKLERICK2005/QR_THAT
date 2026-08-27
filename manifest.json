@@ -3,7 +3,7 @@
   "name": "QR THAT!",
   "version": "0.0.1",
   "description": "Turn Firefox pages and links into QR codes for quick transfer to another device.",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "menus"],
   "browser_specific_settings": {
     "gecko": {
       "id": "qr-that@picklerick2005.github.io",
@@ -14,5 +14,8 @@
   },
   "action": {
     "default_popup": "popup/popup.html"
+  },
+  "background": {
+    "scripts": ["background.js"]
   }
 }

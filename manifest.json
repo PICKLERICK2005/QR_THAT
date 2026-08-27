@@ -4,6 +4,14 @@
   "version": "0.0.1",
   "description": "Turn Firefox pages and links into QR codes for quick transfer to another device.",
   "permissions": ["activeTab", "menus", "storage", "alarms"],
+  "icons": {
+    "16": "icons/Logo/qr-that-16.png",
+    "32": "icons/Logo/qr-that-32.png",
+    "48": "icons/Logo/qr-that-48.png",
+    "96": "icons/Logo/qr-that-96.png",
+    "128": "icons/Logo/qr-that-128.png",
+    "256": "icons/Logo/qr-that-256.png"
+  },
   "host_permissions": [
     "https://rules1.clearurls.xyz/*",
     "https://rules2.clearurls.xyz/*"
@@ -17,7 +25,12 @@
     }
   },
   "action": {
-    "default_popup": "popup/popup.html"
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/Logo/qr-that-16.png",
+      "32": "icons/Logo/qr-that-32.png",
+      "48": "icons/Logo/qr-that-48.png"
+    }
   },
   "commands": {
     "_execute_action": {

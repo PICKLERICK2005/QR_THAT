@@ -22,8 +22,8 @@ class FakeElement {
     this.listeners.set(type, listener);
   }
 
-  dispatch(type) {
-    this.listeners.get(type)?.();
+  async dispatch(type) {
+    await this.listeners.get(type)?.();
   }
 
   removeAttribute(name) {
@@ -41,7 +41,7 @@ class FakeElement {
 }
 
 const elements = new Map(
-  ["page-url", "qr-code", "url-kind", "sanitize"].map((id) => [
+  ["page-url", "qr-code", "url-kind", "sanitize", "open-settings"].map((id) => [
     `#${id}`,
     new FakeElement(),
   ]),
@@ -58,8 +58,12 @@ globalThis.document = {
     return elements.get(selector);
   },
 };
+let optionsPageCalls = 0;
 globalThis.browser = {
-  runtime: { async sendMessage() { return null; } },
+  runtime: {
+    async sendMessage() { return null; },
+    async openOptionsPage() { optionsPageCalls += 1; },
+  },
   tabs: { async query() { return [{ url: trackingUrl }]; } },
   storage: {
     local: {
@@ -83,4 +87,7 @@ assert.match(indicator.className, /url-kind-icon--link/);
 assert.match(indicator.className, /qr-grade--red/);
 assert.equal(elements.get("#page-url").textContent, trackingUrl);
 
-console.log("Passed 6 popup URL-kind integration checks.");
+await elements.get("#open-settings").dispatch("click");
+assert.equal(optionsPageCalls, 1);
+
+console.log("Passed 7 popup integration checks.");

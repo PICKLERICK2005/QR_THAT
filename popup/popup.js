@@ -9,6 +9,15 @@ const urlDisplay = document.querySelector("#page-url");
 const qrDisplay = document.querySelector("#qr-code");
 const urlKindIndicator = document.querySelector("#url-kind");
 const sanitizeControl = document.querySelector("#sanitize");
+const settingsButton = document.querySelector("#open-settings");
+
+settingsButton.addEventListener("click", async () => {
+  try {
+    await browser.runtime.openOptionsPage();
+  } catch {
+    // Firefox owns the settings surface; no popup fallback is needed.
+  }
+});
 
 let targetUrl = null;
 

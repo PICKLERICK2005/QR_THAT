@@ -14,22 +14,35 @@
 
       <section aria-labelledby="keyboard-shortcut-heading">
         <h2 id="keyboard-shortcut-heading">Keyboard shortcut</h2>
-        <p>Current shortcut: <output id="shortcut-value">Loading…</output></p>
+        <dl class="setting-values">
+          <div>
+            <dt>Current shortcut</dt>
+            <dd><output id="shortcut-value">Loading…</output></dd>
+          </div>
+        </dl>
         <button id="configure-shortcut" type="button">Configure in Firefox</button>
-        <p id="shortcut-error" role="status" hidden></p>
+        <p id="shortcut-error" class="status-message" role="status" hidden></p>
       </section>
 
       <section aria-labelledby="rules-heading">
         <h2 id="rules-heading">Rules</h2>
-        <p>Source: <output id="rules-source">Loading…</output></p>
-        <p>Last fetched: <output id="rules-fetched-at">—</output></p>
+        <dl class="setting-values">
+          <div>
+            <dt>Source</dt>
+            <dd><output id="rules-source">Loading…</output></dd>
+          </div>
+          <div>
+            <dt>Last fetched</dt>
+            <dd><output id="rules-fetched-at">—</output></dd>
+          </div>
+        </dl>
         <button id="fetch-rules" type="button">Fetch rules</button>
-        <p id="rules-result" role="status" hidden></p>
+        <p id="rules-result" class="status-message" role="status" hidden></p>
         <label class="automatic-updates">
           <input id="automatic-rules-updates" type="checkbox">
           Automatically update rules
         </label>
-        <p id="automatic-updates-error" role="status" hidden></p>
+        <p id="automatic-updates-error" class="status-message" role="status" hidden></p>
       </section>
     </main>
   </body>

@@ -1,12 +1,18 @@
+import { attemptInitialRulesUpdate } from "./lib/rules-update.js";
+
 const MENU_ID = "qr-that";
 let pendingTarget = null;
 
-browser.runtime.onInstalled.addListener(() => {
+browser.runtime.onInstalled.addListener(async (details) => {
   browser.menus.create({
     id: MENU_ID,
     title: "QR THAT!",
     contexts: ["page", "link", "image"],
   });
+
+  if (details.reason === "install") {
+    await attemptInitialRulesUpdate();
+  }
 });
 
 browser.menus.onClicked.addListener(async (info) => {

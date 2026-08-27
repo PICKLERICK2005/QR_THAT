@@ -28,7 +28,7 @@ if (!targetUrl) {
 
 if (targetUrl) {
   const originalUrl = targetUrl;
-  const rules = loadRules();
+  const rules = await loadRules();
 
   const render = () => {
     const displayedUrl = sanitizeControl.checked

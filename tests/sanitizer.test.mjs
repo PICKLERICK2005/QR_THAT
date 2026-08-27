@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { loadRules } from "../lib/rules.js";
 import { sanitizeUrl } from "../lib/sanitizer.js";
 
-const rules = loadRules();
+const rules = await loadRules();
 
 const cases = [
   {

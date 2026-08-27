@@ -3,7 +3,7 @@
   "name": "QR THAT!",
   "version": "0.0.1",
   "description": "Turn Firefox pages and links into QR codes for quick transfer to another device.",
-  "permissions": ["activeTab", "menus", "storage"],
+  "permissions": ["activeTab", "menus", "storage", "alarms"],
   "host_permissions": [
     "https://rules1.clearurls.xyz/*",
     "https://rules2.clearurls.xyz/*"

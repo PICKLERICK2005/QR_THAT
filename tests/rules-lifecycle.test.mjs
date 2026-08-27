@@ -9,6 +9,7 @@ import {
 import {
   attemptInitialRulesUpdate,
   createManualRulesUpdateHandler,
+  createSingleFlightRulesUpdater,
   downloadRules,
   fetchRulesCandidate,
   RULE_SOURCES,
@@ -253,9 +254,9 @@ const firstManualUpdate = handleSimultaneousManualUpdate(MANUAL_RULES_UPDATE_MES
 const secondManualUpdate = handleSimultaneousManualUpdate(MANUAL_RULES_UPDATE_MESSAGE);
 await Promise.resolve();
 assert.equal(simultaneousCalls, 1);
-assert.equal(firstManualUpdate, secondManualUpdate);
 releaseUpdate();
 assert.deepEqual(await firstManualUpdate, { ok: false });
+assert.deepEqual(await secondManualUpdate, { ok: false });
 
 const manualFailureStorage = fakeStorage(existingSnapshot);
 const handleFailedManualUpdate = createManualRulesUpdateHandler({

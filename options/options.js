@@ -1,4 +1,8 @@
 import { getRulesStatus, MANUAL_RULES_UPDATE_MESSAGE } from "../lib/rules.js";
+import {
+  getAutomaticRulesUpdates,
+  setAutomaticRulesUpdates,
+} from "../lib/rules-schedule.js";
 
 const shortcutValue = document.querySelector("#shortcut-value");
 const configureButton = document.querySelector("#configure-shortcut");
@@ -7,6 +11,8 @@ const rulesSource = document.querySelector("#rules-source");
 const rulesFetchedAt = document.querySelector("#rules-fetched-at");
 const fetchRulesButton = document.querySelector("#fetch-rules");
 const rulesResult = document.querySelector("#rules-result");
+const automaticUpdatesCheckbox = document.querySelector("#automatic-rules-updates");
+const automaticUpdatesError = document.querySelector("#automatic-updates-error");
 
 async function refreshShortcut() {
   try {
@@ -26,6 +32,10 @@ async function refreshRulesStatus() {
   rulesFetchedAt.textContent = status.fetchedAt
     ? new Date(status.fetchedAt).toLocaleString()
     : "—";
+}
+
+async function refreshAutomaticRulesUpdates() {
+  automaticUpdatesCheckbox.checked = await getAutomaticRulesUpdates();
 }
 
 configureButton.addEventListener("click", async () => {
@@ -68,6 +78,26 @@ fetchRulesButton.addEventListener("click", async () => {
   }
 });
 
+automaticUpdatesCheckbox.addEventListener("change", async () => {
+  automaticUpdatesCheckbox.disabled = true;
+  automaticUpdatesError.hidden = true;
+
+  try {
+    await setAutomaticRulesUpdates(automaticUpdatesCheckbox.checked);
+  } catch {
+    try {
+      await refreshAutomaticRulesUpdates();
+    } catch {
+      automaticUpdatesCheckbox.checked = !automaticUpdatesCheckbox.checked;
+    }
+    automaticUpdatesError.textContent = "Unable to save automatic update setting.";
+    automaticUpdatesError.hidden = false;
+  } finally {
+    automaticUpdatesCheckbox.disabled = false;
+  }
+});
+
 window.addEventListener("focus", refreshShortcut);
 refreshShortcut();
 refreshRulesStatus();
+refreshAutomaticRulesUpdates();

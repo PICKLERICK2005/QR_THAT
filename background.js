@@ -2,6 +2,10 @@ import {
   attemptInitialRulesUpdate,
   createManualRulesUpdateHandler,
 } from "./lib/rules-update.js";
+import {
+  handlePeriodicRulesAlarm,
+  reconcileRulesSchedule,
+} from "./lib/rules-schedule.js";
 
 const MENU_ID = "qr-that";
 let pendingTarget = null;
@@ -17,7 +21,13 @@ browser.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === "install") {
     await attemptInitialRulesUpdate();
   }
+
+  await reconcileRulesSchedule();
 });
+
+browser.runtime.onStartup.addListener(() => reconcileRulesSchedule());
+
+browser.alarms.onAlarm.addListener((alarm) => handlePeriodicRulesAlarm(alarm));
 
 browser.menus.onClicked.addListener(async (info) => {
   if (info.menuItemId !== MENU_ID) {
@@ -47,3 +57,5 @@ browser.runtime.onMessage.addListener((message) => {
   pendingTarget = null;
   return Promise.resolve(target);
 });
+
+reconcileRulesSchedule().catch(() => {});

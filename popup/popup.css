@@ -1,12 +1,28 @@
 body {
-  min-width: 12rem;
+  width: 17.5rem;
   margin: 0;
   padding: 1rem;
   font: menu;
-  text-align: center;
+  color-scheme: light dark;
 }
 
 h1 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+}
+
+.qr-placeholder {
+  width: 10.5rem;
+  aspect-ratio: 1;
+  margin: 0 auto 0.875rem;
+  border: 1px solid ButtonBorder;
+  background: ButtonFace;
+}
+
+.url {
+  overflow: hidden;
   margin: 0;
-  font-size: 1.25rem;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

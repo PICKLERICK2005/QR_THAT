@@ -1,9 +1,11 @@
 import { qrcode } from "../vendor/qrcode-generator/qrcode.mjs";
+import { gradeQr } from "../lib/qr-grade.js";
 import { loadRules } from "../lib/rules.js";
 import { sanitizeUrl } from "../lib/sanitizer.js";
 
 const urlDisplay = document.querySelector("#page-url");
 const qrDisplay = document.querySelector("#qr-code");
+const gradeIndicator = document.querySelector("#qr-grade");
 const sanitizeControl = document.querySelector("#sanitize");
 
 let targetUrl = null;
@@ -37,16 +39,28 @@ if (targetUrl) {
 
     urlDisplay.textContent = displayedUrl;
     qrDisplay.replaceChildren();
+    gradeIndicator.className = "qr-grade";
+    gradeIndicator.removeAttribute("title");
+    gradeIndicator.removeAttribute("aria-label");
+    gradeIndicator.hidden = true;
 
     try {
       const qr = qrcode(0, "M");
       qr.addData(displayedUrl);
       qr.make();
+      const grade = gradeQr(qr.getModuleCount());
       qrDisplay.innerHTML = qr.createSvgTag({
         cellSize: 4,
         scalable: true,
         alt: "QR code for the selected URL",
       });
+      if (grade) {
+        const accessibleLabel = `QR density: ${grade.label.replace(/ density$/, "")}`;
+        gradeIndicator.className = `qr-grade qr-grade--${grade.level}`;
+        gradeIndicator.title = accessibleLabel;
+        gradeIndicator.setAttribute("aria-label", accessibleLabel);
+        gradeIndicator.hidden = false;
+      }
     } catch {
       qrDisplay.textContent = "Unable to generate QR code";
     }

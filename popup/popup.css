@@ -28,12 +28,46 @@ h1 {
   height: 100%;
 }
 
-.url {
-  overflow: hidden;
+.url-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   margin: 0;
-  text-align: center;
+}
+
+.url {
+  min-width: 0;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.qr-grade {
+  flex: 0 0 0.6rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+}
+
+.qr-grade[hidden] {
+  display: none;
+}
+
+.qr-grade--green {
+  background: #2e9149;
+}
+
+.qr-grade--yellow {
+  background: #d8a900;
+}
+
+.qr-grade--orange {
+  background: #df6c00;
+}
+
+.qr-grade--red {
+  background: #d33a3a;
 }
 
 .sanitize-control {

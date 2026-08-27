@@ -43,31 +43,57 @@ h1 {
   white-space: nowrap;
 }
 
-.qr-grade {
-  flex: 0 0 0.6rem;
-  width: 0.6rem;
-  height: 0.6rem;
-  border-radius: 50%;
+.url-kind-icon {
+  flex: 0 0 1rem;
+  width: 1rem;
+  height: 1rem;
+  color: CanvasText;
+  background: currentColor;
+  mask: var(--url-kind-mask) center / contain no-repeat;
 }
 
-.qr-grade[hidden] {
+.url-kind-icon[hidden] {
   display: none;
 }
 
+.url-kind-icon--web {
+  --url-kind-mask: url("../icons/Material_Symbols/web_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg");
+}
+
+.url-kind-icon--mail {
+  --url-kind-mask: url("../icons/Material_Symbols/mail_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg");
+}
+
+.url-kind-icon--deskphone {
+  --url-kind-mask: url("../icons/Material_Symbols/deskphone_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg");
+}
+
+.url-kind-icon--files {
+  --url-kind-mask: url("../icons/Material_Symbols/files_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg");
+}
+
+.url-kind-icon--link {
+  --url-kind-mask: url("../icons/Material_Symbols/link_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg");
+}
+
+.url-kind-icon--link-2 {
+  --url-kind-mask: url("../icons/Material_Symbols/link_2_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg");
+}
+
 .qr-grade--green {
-  background: #2e9149;
+  color: #2e9149;
 }
 
 .qr-grade--yellow {
-  background: #d8a900;
+  color: #d8a900;
 }
 
 .qr-grade--orange {
-  background: #df6c00;
+  color: #df6c00;
 }
 
 .qr-grade--red {
-  background: #d33a3a;
+  color: #d33a3a;
 }
 
 .sanitize-control {

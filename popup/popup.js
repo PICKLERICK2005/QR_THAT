@@ -2,10 +2,12 @@ import { qrcode } from "../vendor/qrcode-generator/qrcode.mjs";
 import { gradeQr } from "../lib/qr-grade.js";
 import { loadRules } from "../lib/rules.js";
 import { sanitizeUrl } from "../lib/sanitizer.js";
+import { classifyUrlKind } from "../lib/url-kind.js";
+import { renderUrlKindIndicator } from "./url-kind-indicator.js";
 
 const urlDisplay = document.querySelector("#page-url");
 const qrDisplay = document.querySelector("#qr-code");
-const gradeIndicator = document.querySelector("#qr-grade");
+const urlKindIndicator = document.querySelector("#url-kind");
 const sanitizeControl = document.querySelector("#sanitize");
 
 let targetUrl = null;
@@ -39,10 +41,8 @@ if (targetUrl) {
 
     urlDisplay.textContent = displayedUrl;
     qrDisplay.replaceChildren();
-    gradeIndicator.className = "qr-grade";
-    gradeIndicator.removeAttribute("title");
-    gradeIndicator.removeAttribute("aria-label");
-    gradeIndicator.hidden = true;
+    const urlKind = classifyUrlKind(displayedUrl);
+    renderUrlKindIndicator(urlKindIndicator, urlKind, null);
 
     try {
       const qr = qrcode(0, "M");
@@ -54,13 +54,7 @@ if (targetUrl) {
         scalable: true,
         alt: "QR code for the selected URL",
       });
-      if (grade) {
-        const accessibleLabel = `QR density: ${grade.label.replace(/ density$/, "")}`;
-        gradeIndicator.className = `qr-grade qr-grade--${grade.level}`;
-        gradeIndicator.title = accessibleLabel;
-        gradeIndicator.setAttribute("aria-label", accessibleLabel);
-        gradeIndicator.hidden = false;
-      }
+      renderUrlKindIndicator(urlKindIndicator, urlKind, grade);
     } catch {
       qrDisplay.textContent = "Unable to generate QR code";
     }

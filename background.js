@@ -1,7 +1,11 @@
-import { attemptInitialRulesUpdate } from "./lib/rules-update.js";
+import {
+  attemptInitialRulesUpdate,
+  createManualRulesUpdateHandler,
+} from "./lib/rules-update.js";
 
 const MENU_ID = "qr-that";
 let pendingTarget = null;
+const handleManualRulesUpdate = createManualRulesUpdateHandler();
 
 browser.runtime.onInstalled.addListener(async (details) => {
   browser.menus.create({
@@ -30,6 +34,11 @@ browser.menus.onClicked.addListener(async (info) => {
 });
 
 browser.runtime.onMessage.addListener((message) => {
+  const updateResult = handleManualRulesUpdate(message);
+  if (updateResult) {
+    return updateResult;
+  }
+
   if (message !== "consume-context-target") {
     return undefined;
   }

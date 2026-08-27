@@ -20,6 +20,10 @@ h2 {
   font-size: 1.1rem;
 }
 
+section + section {
+  margin-top: 2rem;
+}
+
 p {
   margin: 0 0 1rem;
 }
@@ -28,6 +32,7 @@ button {
   font: inherit;
 }
 
-#shortcut-error {
+#shortcut-error,
+#rules-result {
   margin-top: 0.75rem;
 }

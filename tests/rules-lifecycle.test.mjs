@@ -1,8 +1,14 @@
 import assert from "node:assert/strict";
 
-import { loadRules, RULES_STORAGE_KEY } from "../lib/rules.js";
+import {
+  getRulesStatus,
+  loadRules,
+  MANUAL_RULES_UPDATE_MESSAGE,
+  RULES_STORAGE_KEY,
+} from "../lib/rules.js";
 import {
   attemptInitialRulesUpdate,
+  createManualRulesUpdateHandler,
   downloadRules,
   fetchRulesCandidate,
   RULE_SOURCES,
@@ -195,4 +201,101 @@ assert.equal(
 assert.equal(initialUpdates, 1);
 assert.equal(initialStorage.state.initialFetchAttempted, true);
 
-console.log("Passed 14 rules lifecycle checks.");
+assert.deepEqual(await getRulesStatus(replacedStorage.area), {
+  source: "fetched",
+  fetchedAt: replacedStorage.state.fetched.fetchedAt,
+  mirror: "rules2",
+});
+assert.deepEqual(await getRulesStatus(fakeStorage(undefined).area), {
+  source: "bundled",
+  fetchedAt: null,
+});
+assert.deepEqual(await getRulesStatus(fakeStorage({ fetched: { catalog: {} } }).area), {
+  source: "bundled",
+  fetchedAt: null,
+});
+
+let manualCalls = 0;
+let manualArguments = null;
+const handleSuccessfulManualUpdate = createManualRulesUpdateHandler({
+  update: async (...args) => {
+    manualCalls += 1;
+    manualArguments = args;
+    return { ok: true, snapshot: accepted };
+  },
+});
+assert.deepEqual(await handleSuccessfulManualUpdate(MANUAL_RULES_UPDATE_MESSAGE), {
+  ok: true,
+  source: "rules2",
+  fetchedAt: "2026-08-27T00:00:00.000Z",
+});
+assert.equal(manualCalls, 1);
+assert.deepEqual(manualArguments, []);
+assert.equal(
+  handleSuccessfulManualUpdate({
+    type: MANUAL_RULES_UPDATE_MESSAGE,
+    url: "https://attacker.example/rules.json",
+  }),
+  undefined,
+);
+
+let releaseUpdate;
+let simultaneousCalls = 0;
+const handleSimultaneousManualUpdate = createManualRulesUpdateHandler({
+  update: () => {
+    simultaneousCalls += 1;
+    return new Promise((resolve) => {
+      releaseUpdate = () => resolve({ ok: false });
+    });
+  },
+});
+const firstManualUpdate = handleSimultaneousManualUpdate(MANUAL_RULES_UPDATE_MESSAGE);
+const secondManualUpdate = handleSimultaneousManualUpdate(MANUAL_RULES_UPDATE_MESSAGE);
+await Promise.resolve();
+assert.equal(simultaneousCalls, 1);
+assert.equal(firstManualUpdate, secondManualUpdate);
+releaseUpdate();
+assert.deepEqual(await firstManualUpdate, { ok: false });
+
+const manualFailureStorage = fakeStorage(existingSnapshot);
+const handleFailedManualUpdate = createManualRulesUpdateHandler({
+  update: () =>
+    updateRules({
+      storageArea: manualFailureStorage.area,
+      fetchImpl: async () => {
+        throw new Error("offline");
+      },
+    }),
+});
+assert.deepEqual(await handleFailedManualUpdate(MANUAL_RULES_UPDATE_MESSAGE), { ok: false });
+assert.deepEqual(manualFailureStorage.state, existingSnapshot);
+assert.equal(manualFailureStorage.writes, 0);
+
+const bundledFailureStorage = fakeStorage({ initialFetchAttempted: true });
+const handleBundledManualUpdate = createManualRulesUpdateHandler({
+  update: () =>
+    updateRules({
+      storageArea: bundledFailureStorage.area,
+      fetchImpl: async () => {
+        throw new Error("offline");
+      },
+    }),
+});
+assert.deepEqual(await handleBundledManualUpdate(MANUAL_RULES_UPDATE_MESSAGE), { ok: false });
+assert.deepEqual(bundledFailureStorage.state, { initialFetchAttempted: true });
+assert.equal(bundledFailureStorage.writes, 0);
+
+const manualRecoveryStorage = fakeStorage({ initialFetchAttempted: true });
+const recoveryResponses = await validResponses(RULE_SOURCES[0], primaryCatalog);
+const handleManualRecovery = createManualRulesUpdateHandler({
+  update: () =>
+    updateRules({
+      storageArea: manualRecoveryStorage.area,
+      fetchImpl: fakeFetch(recoveryResponses),
+    }),
+});
+assert.equal((await handleManualRecovery(MANUAL_RULES_UPDATE_MESSAGE)).ok, true);
+assert.equal(manualRecoveryStorage.state.initialFetchAttempted, true);
+assert.equal((await getRulesStatus(manualRecoveryStorage.area)).source, "fetched");
+
+console.log("Passed 24 rules lifecycle checks.");

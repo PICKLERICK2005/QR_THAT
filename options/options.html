@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="light dark">
     <title>QR THAT! — Settings</title>
     <link rel="stylesheet" href="options.css">
-    <script src="options.js" defer></script>
+    <script src="options.js" type="module"></script>
   </head>
   <body>
     <main>
@@ -17,6 +17,14 @@
         <p>Current shortcut: <output id="shortcut-value">Loading…</output></p>
         <button id="configure-shortcut" type="button">Configure in Firefox</button>
         <p id="shortcut-error" role="status" hidden></p>
+      </section>
+
+      <section aria-labelledby="rules-heading">
+        <h2 id="rules-heading">Rules</h2>
+        <p>Source: <output id="rules-source">Loading…</output></p>
+        <p>Last fetched: <output id="rules-fetched-at">—</output></p>
+        <button id="fetch-rules" type="button">Fetch rules</button>
+        <p id="rules-result" role="status" hidden></p>
       </section>
     </main>
   </body>

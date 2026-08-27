@@ -10,7 +10,25 @@
   </head>
   <body>
     <header class="popup-header">
-      <h1>QR THAT!</h1>
+      <h1 class="popup-title" aria-label="QR THAT!">
+        <span class="title-qr" aria-hidden="true">QR</span>
+        <span class="title-that" aria-hidden="true">THAT</span><span class="title-bang" aria-hidden="true">!</span>
+      </h1>
+    </header>
+    <div id="qr-code" class="qr-output"></div>
+    <p class="url-row">
+      <span id="url-kind" class="url-kind-icon" role="img" hidden></span>
+      <span id="page-url" class="url">example.com/article</span>
+    </p>
+    <div class="popup-controls">
+      <label
+        class="sanitize-control"
+        title="Removes known tracking information using community-maintained ClearURLs rules. Processing happens locally and may alter the URL."
+      >
+        <input id="sanitize" type="checkbox" checked>
+        <span class="sanitize-icon" aria-hidden="true"></span>
+        <span>Sanitize</span>
+      </label>
       <button
         id="open-settings"
         class="settings-button"
@@ -18,18 +36,6 @@
         title="Open QR THAT! settings"
         aria-label="Open QR THAT! settings"
       ><span class="settings-button-icon" aria-hidden="true"></span></button>
-    </header>
-    <div id="qr-code" class="qr-output"></div>
-    <p class="url-row">
-      <span id="url-kind" class="url-kind-icon" role="img" hidden></span>
-      <span id="page-url" class="url">example.com/article</span>
-    </p>
-    <label
-      class="sanitize-control"
-      title="Removes known tracking information using community-maintained ClearURLs rules. Processing happens locally and may alter the URL."
-    >
-      <input id="sanitize" type="checkbox" checked>
-      <span>Sanitize</span>
-    </label>
+    </div>
   </body>
 </html>

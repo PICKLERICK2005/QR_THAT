@@ -22,5 +22,17 @@ await access(
     import.meta.url,
   ),
 );
+await access(
+  new URL(
+    "../icons/Material_Symbols/check_box_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg",
+    import.meta.url,
+  ),
+);
+await access(
+  new URL(
+    "../icons/Material_Symbols/check_box_outline_blank_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg",
+    import.meta.url,
+  ),
+);
 
-console.log("Passed 13 interface asset checks.");
+console.log("Passed 15 interface asset checks.");

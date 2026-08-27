@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "QR THAT!",
+  "version": "0.0.1",
+  "description": "Turn Firefox pages and links into QR codes for quick transfer to another device.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "qr-that@picklerick2005.github.io",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+  "action": {
+    "default_popup": "popup/popup.html"
+  }
+}

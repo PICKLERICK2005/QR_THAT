@@ -1,0 +1,12 @@
+body {
+  min-width: 12rem;
+  margin: 0;
+  padding: 1rem;
+  font: menu;
+  text-align: center;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}

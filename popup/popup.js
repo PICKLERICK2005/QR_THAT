@@ -86,11 +86,21 @@ if (targetUrl) {
       qr.addData(displayedUrl);
       qr.make();
       const grade = gradeQr(qr.getModuleCount());
-      qrDisplay.innerHTML = qr.createSvgTag({
+      const svgText = qr.createSvgTag({
         cellSize: 4,
         scalable: true,
         alt: "QR code for the selected URL",
       });
+      const svgDocument = new DOMParser().parseFromString(svgText, "image/svg+xml");
+      const svg = svgDocument.documentElement;
+      if (
+        svg.nodeName.toLowerCase() !== "svg" ||
+        svg.namespaceURI !== "http://www.w3.org/2000/svg" ||
+        svgDocument.querySelector("parsererror")
+      ) {
+        throw new Error("Invalid QR SVG");
+      }
+      qrDisplay.replaceChildren(document.importNode(svg, true));
       renderUrlKindIndicator(urlKindIndicator, urlKind, grade);
       renderAdvancedDetails(advancedElements, { ...metadata, grade });
     } catch {

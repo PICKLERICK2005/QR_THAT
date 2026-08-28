@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 
 class FakeElement {
   constructor() {
@@ -8,6 +9,7 @@ class FakeElement {
     this.disabled = false;
     this.hidden = true;
     this.innerHTML = "";
+    this.children = [];
     this.listeners = new Map();
     this.textContent = "";
     this.title = "";
@@ -34,7 +36,8 @@ class FakeElement {
     delete this.attributes[name];
   }
 
-  replaceChildren() {
+  replaceChildren(...children) {
+    this.children = children;
     this.innerHTML = "";
     this.textContent = "";
   }
@@ -69,9 +72,36 @@ const trackingUrl =
   Array.from({ length: 30 }, () => `utm_source=${"x".repeat(20)}`).join("&");
 
 globalThis.document = {
+  importNode(node, deep) {
+    assert.equal(deep, true);
+    return { ...node, imported: true };
+  },
   querySelector(selector) {
     return elements.get(selector);
   },
+};
+let svgParseCalls = 0;
+let failSvgParsing = false;
+globalThis.DOMParser = class {
+  parseFromString(svgText, type) {
+    svgParseCalls += 1;
+    assert.equal(type, "image/svg+xml");
+    assert.match(svgText, /^<svg\b/);
+    const svg = failSvgParsing
+      ? { nodeName: "parsererror", namespaceURI: null }
+      : {
+          nodeName: "svg",
+          namespaceURI: "http://www.w3.org/2000/svg",
+          source: svgText,
+        };
+    return {
+      documentElement: svg,
+      querySelector(selector) {
+        assert.equal(selector, "parsererror");
+        return failSvgParsing ? {} : null;
+      },
+    };
+  }
 };
 let optionsPageCalls = 0;
 let tabQueries = 0;
@@ -122,6 +152,9 @@ assert.equal(elements.get("#advanced-qr").textContent, "Version 3 · 29×29 · E
 assert.equal(elements.get("#advanced-density").textContent, "Low");
 assert.equal(elements.get("#advanced-sanitization").textContent, "Changed");
 assert.equal(elements.get("#advanced-rules").textContent, "Bundled");
+assert.equal(elements.get("#qr-code").children.length, 1);
+assert.equal(elements.get("#qr-code").children[0].nodeName, "svg");
+assert.equal(elements.get("#qr-code").children[0].imported, true);
 
 await advancedButton.dispatch("click");
 assert.equal(advancedButton.getAttribute("aria-expanded"), "true");
@@ -138,6 +171,7 @@ assert.equal(elements.get("#advanced-payload").textContent, trackingUrl);
 assert.match(elements.get("#advanced-qr").textContent, /^Version \d+ · \d+×\d+ · ECC M$/);
 assert.equal(elements.get("#advanced-density").textContent, "Very high");
 assert.equal(elements.get("#advanced-sanitization").textContent, "Off");
+assert.equal(svgParseCalls, 2);
 
 await advancedButton.dispatch("click");
 assert.equal(advancedButton.getAttribute("aria-expanded"), "false");
@@ -147,4 +181,14 @@ assert.equal(fetchCalls, 0);
 await elements.get("#open-settings").dispatch("click");
 assert.equal(optionsPageCalls, 1);
 
-console.log("Passed 27 popup integration checks.");
+failSvgParsing = true;
+sanitize.checked = true;
+await sanitize.dispatch("change");
+assert.equal(elements.get("#qr-code").textContent, "Unable to generate QR code");
+
+const popupSource = await readFile(new URL("../popup/popup.js", import.meta.url), "utf8");
+assert.doesNotMatch(popupSource, /\.innerHTML\s*=/);
+assert.equal(popupSource.match(/qrcode\(0, "M"\)/g)?.length, 1);
+assert.match(popupSource, /gradeQr\(qr\.getModuleCount\(\)\)/);
+
+console.log("Passed 35 popup integration checks.");

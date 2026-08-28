@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "QR THAT!",
-  "version": "0.0.1",
-  "description": "Turn Firefox pages and links into QR codes for quick transfer to another device.",
+  "version": "1.0.0",
+  "description": "Turn Firefox pages, links, and images into QR codes with optional local URL sanitization.",
   "permissions": ["activeTab", "menus", "storage", "alarms"],
   "icons": {
     "16": "icons/Logo/qr-that-16.png",

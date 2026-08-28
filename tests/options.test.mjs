@@ -43,7 +43,7 @@ globalThis.window = { addEventListener() {} };
 globalThis.browser = {
   commands: {
     async getAll() {
-      return [{ name: "_execute_action", shortcut: "Ctrl+Alt+Q" }];
+      return [{ name: "_execute_action", shortcut: "Ctrl+Shift+Period" }];
     },
     async openShortcutSettings() {},
   },

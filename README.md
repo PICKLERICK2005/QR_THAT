@@ -1,40 +1,32 @@
 # QR THAT!
 
-QR THAT! is a Firefox extension that turns the current page, a link or an image URL within the webpage you're currently viewing, into a standard QR code for quick transfer to a mobile device rather than having to rely on the native firefox "Send to Mobile" feature, quickshare, or desktop versions of chat apps to simply open the link on your other devices.
-
-The popup can optionally remove known tracking information locally using community-maintained [ClearURLs rules](https://github.com/ClearURLs/Rules). A verified rules snapshot is bundled with the extension so sanitization remains available offline. On first installation, QR THAT! makes one best-effort attempt to fetch a newer verified snapshot from the official ClearURLs mirrors and permanently falls back to the bundled copy if that fails. This isn't only a privacy feature, it also makes the qr codes simpler to read!
-
-The project is currently still in development.
+QR THAT! turns the current Firefox page—or a contextual link or image—into a scannable QR code for quick transfer to another device, with optional local tracking-parameter cleanup.
 
 ## Features
 
-- Generate a QR code for the active Firefox tab.
-- Generate contextual QR codes for pages, links, and images and links embedded in elements.
-- Toggle local URL sanitization without changing the original URL.
-- Operates entirely without telemetry or transmitting browsing URLs.
+- Generate QRs from the toolbar or the page, link, and image context menu.
+- Toggle local URL sanitization using community-maintained ClearURLs rules.
+- See the URL kind and QR density at a glance, or open Advanced for technical details.
+- Use the default `Ctrl+Shift+.` shortcut or reconfigure it through Firefox.
+- Keep sanitization rules current with a manual fetch or optional weekly updates.
 
-QR generation uses the bundled [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) 2.0.4 library. Rules fetching is separate from QR generation and never includes page or contextual URLs.
+QR generation and URL processing happen locally. QR THAT! does not send browsing URLs to an external QR service and has no analytics, telemetry, accounts, or QR history. A verified ClearURLs snapshot is bundled; fixed ClearURLs mirrors are contacted only for a best-effort first-install rules fetch, a manual fetch, or optional automatic updates. Those requests do not contain the page or contextual URL being converted.
 
-## Temporary installation in Firefox
+## Temporary installation
 
 1. Open `about:debugging` in Firefox.
 2. Select **This Firefox**.
 3. Select **Load Temporary Add-on**.
-4. Choose this project's `manifest.json` file.
+4. Choose this repository's `manifest.json`.
 
-## Checks
+## Third-party material
 
-The focused checks require a current Node.js release and no installed dependencies:
-
-```sh
-node tests/sanitizer.test.mjs
-node tests/rules-lifecycle.test.mjs
-```
+- [qrcode-generator 2.0.4](https://github.com/kazuhikoarase/qrcode-generator), MIT License, is vendored in `vendor/qrcode-generator/`.
+- [ClearURLs Rules](https://github.com/ClearURLs/Rules), LGPL-3.0, are bundled as data in `rules/bundled/`.
+- [Google Material Symbols](https://fonts.google.com/icons), Apache License 2.0, are vendored as SVGs in `icons/Material_Symbols/`.
 
 ## License
 
-QR THAT! is licensed under the [MIT License](LICENSE). Bundled third-party materials retain their respective licenses in `vendor/`, `rules/bundled/`, and `icons/Material_Symbols/`.
+QR THAT! first-party code and project logo assets are licensed under the [MIT License](LICENSE). Bundled third-party materials retain the licenses included beside them.
 
-Interface icons in `icons/Material_Symbols/` are Google Material Symbols, used under the [Apache License 2.0](icons/Material_Symbols/LICENSE). Project logo assets in `icons/Logo/` are covered by QR THAT!'s MIT License.
-
->“QR Code” is a registered trademark of DENSO WAVE INCORPORATED. QR THAT! is an independent project and is not affiliated with or endorsed by DENSO WAVE INCORPORATED.
+“QR Code” is a registered trademark of DENSO WAVE INCORPORATED. QR THAT! is an independent project and is not affiliated with or endorsed by DENSO WAVE INCORPORATED.

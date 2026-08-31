@@ -1,5 +1,5 @@
 # QR THAT!
-[![QR_THAT](icons/Logo/qr-that-126.png)](https://github.com/PICKLERICK2005/QR_THAT)
+[![QR_THAT](icons/Logo/qr-that-128.png)](https://github.com/PICKLERICK2005/QR_THAT)
 
 [![Get the add-on](icons/get-the-addon.webp)](https://addons.mozilla.org/en-US/firefox/addon/qr-that/)
 

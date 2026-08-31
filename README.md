@@ -1,5 +1,7 @@
 # QR THAT!
 
+[![Get the add-on](icons/get-the-addon.webp)](https://addons.mozilla.org/en-US/firefox/addon/qr-that/) [![QR_THAT](icons/Logo/qr-that-128.png)]
+
 QR THAT! turns the current Firefox page—or a contextual link or image—into a scannable QR code for quick transfer to another device, with optional local tracking-parameter cleanup.
 
 ## Features
@@ -11,6 +13,10 @@ QR THAT! turns the current Firefox page—or a contextual link or image—into a
 - Keep sanitization rules current with a manual fetch or optional weekly updates.
 
 QR generation and URL processing happen locally. QR THAT! does not send browsing URLs to an external QR service and has no analytics, telemetry, accounts, or QR history. A verified ClearURLs snapshot is bundled; fixed ClearURLs mirrors are contacted only for a best-effort first-install rules fetch, a manual fetch, or optional automatic updates. Those requests do not contain the page or contextual URL being converted.
+
+## Installation
+
+- [Get it through the Mozilla addons store](https://addons.mozilla.org/en-US/firefox/addon/qr-that/)
 
 ## Temporary installation
 

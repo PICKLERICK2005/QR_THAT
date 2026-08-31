@@ -1,6 +1,7 @@
 # QR THAT!
+[![QR_THAT](icons/Logo/qr-that-256.png)](https://github.com/PICKLERICK2005/QR_THAT)
 
-[![Get the add-on](icons/get-the-addon.webp)](https://addons.mozilla.org/en-US/firefox/addon/qr-that/) [![QR_THAT](icons/Logo/qr-that-128.png)]
+[![Get the add-on](icons/get-the-addon.webp)](https://addons.mozilla.org/en-US/firefox/addon/qr-that/)
 
 QR THAT! turns the current Firefox page—or a contextual link or image—into a scannable QR code for quick transfer to another device, with optional local tracking-parameter cleanup.
 
